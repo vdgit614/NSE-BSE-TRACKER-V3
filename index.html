@@ -39,9 +39,9 @@ h2 { margin: 0; font-size: 1.2em; display: flex; align-items: center; gap: 6px; 
 /* Indices */
 .indices-container { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 .index-card { flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; min-width: 140px; }
-.index-card .sym { font-weight: bold; color: var(--text); }
-.green-text { color: #00e676; font-weight: bold; }
-.red-text { color: #ff5252; font-weight: bold; }
+.index-card .sym { font-weight: bold; color: #fff; }
+.green-text { color: #00e676 !important; font-weight: bold; }
+.red-text { color: #ff5252 !important; font-weight: bold; }
 
 /* Input Group */
 .input-group { display: flex; gap: 5px; margin-bottom: 10px; position: relative; width: 100%; box-sizing: border-box; align-items: center; }
@@ -49,7 +49,7 @@ input[type="text"] { flex: 1; min-width: 0; padding: 10px; border-radius: 8px; b
 .btn { padding: 10px 12px; border-radius: 8px; border: 0; background: var(--btn-bg); color: var(--btn-text); font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .camera-btn { background: #333; color: #fff; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; flex-shrink: 0; }
 
-/* Controls Row (Exchange + Auto-Refresh) */
+/* Controls Row */
 .controls-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-left: 5px; }
 .exchange-toggle { display: flex; gap: 15px; font-size: 12px; color: var(--muted); }
 .exchange-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
@@ -59,11 +59,11 @@ input[type="text"] { flex: 1; min-width: 0; padding: 10px; border-radius: 8px; b
 .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 180px; overflow-y: auto; z-index: 1000; display: none; margin-top: 5px; }
 .suggestion-item { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; color: var(--text); }
 
-/* Card UI Updates */
+/* Card UI */
 .sector-header { background: var(--sector-header); padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: bold; margin: 20px 0 10px 0; color: var(--text); border-left: 4px solid var(--btn-bg); }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-.sym { font-size: 1.2em; font-weight: bold; display:flex; align-items:center; gap:6px; color: #fff; }
+.sym { font-size: 1.2em; font-weight: bold; display:flex; align-items:center; gap:6px; color: #fff !important; }
 .exc-badge { font-size: 9px; padding: 2px 5px; border-radius: 4px; background: #444; color: #fff; }
 .current-price { font-size: 1.6em; font-weight: bold; margin-top: 5px; }
 .price-change { font-size: 14px; font-weight: bold; margin-bottom: 15px; }
@@ -100,7 +100,7 @@ table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
 th { background: var(--input-bg); color: var(--muted); }
 
-/* Login */
+/* Login (Fixed text) */
 .full-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
 .auth-input-container { position: relative; width: 80%; max-width: 300px; margin: 5px auto 10px auto; }
 .auth-input { width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid var(--border); background-color: var(--input-bg); color: var(--text); font-size: 14px; outline: none; box-sizing: border-box; }
@@ -111,117 +111,6 @@ th { background: var(--input-bg); color: var(--muted); }
 </style>
 </head>
 <body>
-<div id="loading-screen" class="full-screen">
-    <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
-    <p>Loading... ⏳</p>
-</div>
-
-<script>
-    setTimeout(function() {
-        var loader = document.getElementById("loading-screen");
-        if(loader && loader.style.display !== "none") {
-            loader.innerHTML += "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
-        }
-    }, 6000);
-</script>
-
-<div id="login-screen" class="full-screen" style="display: none;">
-    <h2 style="color: #4CAF50; margin-bottom: 20px;">LOGIN</h2>
-    <div class="auth-input-container">
-        <input type="email" id="email-input" class="auth-input" placeholder="Enter Email">
-    </div>
-    <div class="auth-input-container">
-        <input type="password" id="password-input" class="auth-input" placeholder="Enter Password">
-        <span id="toggle-password" class="toggle-pwd">👁️</span>
-    </div>
-    <div class="forgot-pwd" id="forgot-btn">Forgot Password?</div>
-    <button id="login-btn" class="auth-btn">Login</button>
-    <button id="signup-btn" class="auth-btn" style="background:#333;">Sign Up</button>
-    <p id="error-message" class="error-msg"></p>
-</div>
-
-<!-- Sidebar & Overlay -->
-<div id="overlay" class="overlay"></div>
-<div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-        Menu <span class="close-menu" id="close-menu">✖</span>
-    </div>
-    <div class="menu-item" onclick="switchView('card-view')">🏠 Home (Cards)</div>
-    <div class="menu-item" onclick="switchView('table-view')">📊 Table View (Sheet)</div>
-    <div class="menu-item" onclick="switchView('news-view')">📰 Stock News</div>
-    <div class="menu-item" id="logout-btn" style="color: #ff5252; margin-top: auto;">🚪 Logout</div>
-</div>
-
-<!-- Main App Container -->
-<div id="main-app" style="display: none;">
-    
-    <div class="header">
-        <div class="header-left">
-            <span class="menu-icon" id="open-menu">☰</span>
-            <h2>V3 Tracker</h2>
-        </div>
-        <button id="theme-btn" style="background:transparent; border:none; color:var(--text); font-size:18px;">🌓</button>
-    </div>
-
-    <!-- Indices -->
-    <div class="indices-container">
-        <div class="index-card" id="nifty-card">Loading NIFTY...</div>
-        <div class="index-card" id="sensex-card">Loading SENSEX...</div>
-    </div>
-
-    <!-- View 1: Card View (Home) -->
-    <div id="card-view">
-        <div class="input-group">
-            <input type="text" id="inp" placeholder="Search stock (e.g. TCS)" autocomplete="off">
-            <button id="add-btn" class="btn">Add</button>
-            <input type="file" id="ocr-upload" accept="image/*" style="display: none;">
-            <button class="camera-btn" onclick="document.getElementById('ocr-upload').click()">📷</button>
-            <div id="suggestions" class="suggestions-box"></div>
-        </div>
-        
-        <!-- Exchange & Auto-Refresh Controls -->
-        <div class="controls-row">
-            <div class="exchange-toggle">
-                <label><input type="radio" name="exchange" value="NSE" checked> NSE</label>
-                <label><input type="radio" name="exchange" value="BSE"> BSE</label>
-            </div>
-            <label class="auto-refresh-box">
-                <input type="checkbox" id="auto-refresh-btn"> Auto-Refresh (1m)
-            </label>
-        </div>
-        
-        <div id="ocr-loading" style="font-size:12px; color:#00e676; display:none; text-align:center;">Scanning image... ⏳</div>
-        <div id="list"></div>
-    </div>
-
-    <!-- View 2: Table View -->
-    <div id="table-view" style="display: none;">
-        <h3 style="margin-top:0;">Portfolio Table</h3>
-        <div class="table-container">
-            <table id="portfolio-table">
-                <thead>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Price</th>
-                        <th>Change</th>
-                        <th>52W High</th>
-                        <th>52W Low</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- View 3: News -->
-    <div id="news-view" style="display: none;">
-        <h3 style="margin-top:0;">Market News</h3>
-        <div id="global-news-container">
-            <p class="small">Fetching latest news for your stocks...</p>
-        </div>
-    </div>
-
-</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -265,7 +154,15 @@ document.getElementById("forgot-btn").addEventListener("click", () => {
     }).catch(err => { errorMsg.style.color = "#ff5252"; errorMsg.innerText = err.message; errorMsg.style.display = "block"; });
 });
 
-document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
+// Fixed Logout: Closes menu before signing out
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+const closeMenu = () => { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+    closeMenu(); 
+    signOut(auth);
+});
 
 onAuthStateChanged(auth, (user) => {
     document.getElementById("loading-screen").style.display = "none";
@@ -279,10 +176,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
 document.getElementById("open-menu").onclick = () => { sidebar.classList.add("open"); overlay.classList.add("open"); }
-const closeMenu = () => { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
 document.getElementById("close-menu").onclick = closeMenu;
 overlay.onclick = closeMenu;
 
@@ -307,7 +201,9 @@ window.fetchMarketIndices = async function() {
             let meta = data.chart.result[0].meta;
             
             let current = meta.regularMarketPrice;
-            let diff = current - meta.previousClose;
+            // Fallback to chartPreviousClose if previousClose is missing
+            let prev = (meta.previousClose !== undefined && meta.previousClose !== null) ? meta.previousClose : meta.chartPreviousClose;
+            let diff = current - prev;
             
             let color = diff >= 0 ? 'green-text' : 'red-text';
             let arrow = diff >= 0 ? '▲' : '▼';
@@ -315,7 +211,7 @@ window.fetchMarketIndices = async function() {
             let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             let diffFormatted = Math.abs(diff).toFixed(2);
             
-            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span>${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted}</span>`;
+            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="${color}">${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted}</span>`;
         } catch(e) {
             document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="red-text">Error</span>`;
         }
@@ -401,7 +297,6 @@ function initApp() {
         generateGlobalNews();
     }
 
-    // Auto-Refresh Logic
     let autoRefreshInterval;
     document.getElementById('auto-refresh-btn').addEventListener('change', (e) => {
         if(e.target.checked) {
@@ -423,20 +318,21 @@ function initApp() {
         });
     }
 
+    // Dynamic Colors applied to Table View Fix
     window.populateTable = function() {
         const tbody = document.getElementById("table-body");
         tbody.innerHTML = "";
         myStocks.forEach(item => {
             let data = globalStockData[item];
             if(!data) return;
-            let color = data.diff >= 0 ? '#00e676' : '#ff5252';
+            let colorCls = data.diff >= 0 ? 'green-text' : 'red-text';
             let tr = document.createElement("tr");
             tr.innerHTML = `
-                <td><b>${data.sym}</b></td>
-                <td>₹${data.price}</td>
-                <td style="color:${color};">${data.diff >= 0 ? '▲':'▼'} ${data.diff}</td>
-                <td>₹${data.high}</td>
-                <td>₹${data.low}</td>
+                <td><b style="color:#fff;">${data.sym}</b></td>
+                <td><b class="${colorCls}">₹${data.price}</b></td>
+                <td class="${colorCls}">${data.diff >= 0 ? '▲':'▼'} ${Math.abs(data.diff).toFixed(2)}</td>
+                <td class="green-text">₹${data.high}</td>
+                <td class="red-text">₹${data.low}</td>
             `;
             tbody.appendChild(tr);
         });
@@ -467,7 +363,6 @@ function initApp() {
                 let c = closes[i];
                 if(c === null) continue;
                 
-                // Track 52W High / Low & Format Date with Year (e.g. 23 Sept 2026)
                 if(c > maxPrice) { maxPrice = c; maxDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}); }
                 if(c < minPrice) { minPrice = c; minDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}); }
                 
@@ -483,12 +378,13 @@ function initApp() {
             if(minPrice === Infinity) minPrice = meta.regularMarketDayLow || meta.regularMarketPrice;
 
             let current = meta.regularMarketPrice;
-            let prev = meta.previousClose;
+            // Fixed NaN Issue logic: Fallback to chartPreviousClose
+            let prev = (meta.previousClose !== undefined && meta.previousClose !== null) ? meta.previousClose : meta.chartPreviousClose;
+            
             let diff = current - prev;
             let pChange = (diff / prev) * 100;
             
             let isPos = diff >= 0;
-            // Dynamic Color for Current Price
             let colorCls = isPos ? 'green-text' : 'red-text';
             let sign = isPos ? '+' : '';
             let arrow = isPos ? '▲' : '▼';
@@ -501,7 +397,7 @@ function initApp() {
                     <div class="actions"><button class="refresh-btn" data-item="${item}">↻</button><button class="del-btn" data-item="${item}">Del</button></div>
                 </div>
                 
-                <!-- DYNAMIC PRICE COLOR -->
+                <!-- DYNAMIC PRICE COLOR (Fixed) -->
                 <div class="current-price ${colorCls}">₹${current.toFixed(2)}</div>
                 <div class="price-change ${colorCls}">${arrow} ${sign}${diff.toFixed(2)} (${sign}${pChange.toFixed(2)}%)</div>
                 
