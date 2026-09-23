@@ -111,6 +111,118 @@ th { background: var(--input-bg); color: var(--muted); }
 </style>
 </head>
 <body>
+<div id="loading-screen" class="full-screen">
+    <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
+    <p>Loading... ⏳</p>
+</div>
+
+<script>
+    setTimeout(function() {
+        var loader = document.getElementById("loading-screen");
+        if(loader && loader.style.display !== "none") {
+            loader.innerHTML += "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
+        }
+    }, 6000);
+</script>
+
+<div id="login-screen" class="full-screen" style="display: none;">
+    <!-- Fixed Login Screen Title -->
+    <h2 style="color: #4CAF50; margin-bottom: 20px;">NSE BSE TRACKER PRO V3</h2>
+    <div class="auth-input-container">
+        <input type="email" id="email-input" class="auth-input" placeholder="Enter Email">
+    </div>
+    <div class="auth-input-container">
+        <input type="password" id="password-input" class="auth-input" placeholder="Enter Password">
+        <span id="toggle-password" class="toggle-pwd">👁️</span>
+    </div>
+    <div class="forgot-pwd" id="forgot-btn">Forgot Password?</div>
+    <button id="login-btn" class="auth-btn">Login</button>
+    <button id="signup-btn" class="auth-btn" style="background:#333;">Sign Up</button>
+    <p id="error-message" class="error-msg"></p>
+</div>
+
+<!-- Sidebar & Overlay -->
+<div id="overlay" class="overlay"></div>
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        Menu <span class="close-menu" id="close-menu">✖</span>
+    </div>
+    <div class="menu-item" onclick="switchView('card-view')">🏠 Home (Cards)</div>
+    <div class="menu-item" onclick="switchView('table-view')">📊 Table View (Sheet)</div>
+    <div class="menu-item" onclick="switchView('news-view')">📰 Stock News</div>
+    <div class="menu-item" id="logout-btn" style="color: #ff5252; margin-top: auto;">🚪 Logout</div>
+</div>
+
+<!-- Main App Container -->
+<div id="main-app" style="display: none;">
+    
+    <div class="header">
+        <div class="header-left">
+            <span class="menu-icon" id="open-menu">☰</span>
+            <h2>V3 Tracker</h2>
+        </div>
+        <button id="theme-btn" style="background:transparent; border:none; color:var(--text); font-size:18px;">🌓</button>
+    </div>
+
+    <!-- Indices -->
+    <div class="indices-container">
+        <div class="index-card" id="nifty-card">Loading NIFTY...</div>
+        <div class="index-card" id="sensex-card">Loading SENSEX...</div>
+    </div>
+
+    <!-- View 1: Card View (Home) -->
+    <div id="card-view">
+        <div class="input-group">
+            <input type="text" id="inp" placeholder="Search stock (e.g. TCS)" autocomplete="off">
+            <button id="add-btn" class="btn">Add</button>
+            <input type="file" id="ocr-upload" accept="image/*" style="display: none;">
+            <button class="camera-btn" onclick="document.getElementById('ocr-upload').click()">📷</button>
+            <div id="suggestions" class="suggestions-box"></div>
+        </div>
+        
+        <!-- Exchange & Auto-Refresh Controls -->
+        <div class="controls-row">
+            <div class="exchange-toggle">
+                <label><input type="radio" name="exchange" value="NSE" checked> NSE</label>
+                <label><input type="radio" name="exchange" value="BSE"> BSE</label>
+            </div>
+            <label class="auto-refresh-box">
+                <input type="checkbox" id="auto-refresh-btn"> Auto-Refresh (1m)
+            </label>
+        </div>
+        
+        <div id="ocr-loading" style="font-size:12px; color:#00e676; display:none; text-align:center;">Scanning image... ⏳</div>
+        <div id="list"></div>
+    </div>
+
+    <!-- View 2: Table View -->
+    <div id="table-view" style="display: none;">
+        <h3 style="margin-top:0;">Portfolio Table</h3>
+        <div class="table-container">
+            <table id="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>Change</th>
+                        <th>52W High</th>
+                        <th>52W Low</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- View 3: News -->
+    <div id="news-view" style="display: none;">
+        <h3 style="margin-top:0;">Market News</h3>
+        <div id="global-news-container">
+            <p class="small">Fetching latest news for your stocks...</p>
+        </div>
+    </div>
+
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
