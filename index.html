@@ -222,13 +222,30 @@ window.fetchMarketIndices = async function() {
     const indices = [ { id: 'nifty', sym: '%5ENSEI', name: 'NIFTY' }, { id: 'sensex', sym: '%5EBSESN', name: 'SENSEX' } ];
     for (let idx of indices) {
         try {
-            let res = await fetch("https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=" + idx.sym); let data = await res.json();
-            let meta = data.chart.result[0].meta; let current = meta.regularMarketPrice; let prev = (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null) ? meta.chartPreviousClose : meta.previousClose; let diff = current - prev; let color = diff >= 0 ? 'green-text' : 'red-text'; let arrow = diff >= 0 ? '▲' : '▼'; let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}); let diffFormatted = Math.abs(diff).toFixed(2);
-            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="${color}">${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted}</span>`;
+            let res = await fetch("https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=" + idx.sym + "&range=5d"); 
+            let data = await res.json();
+            let result = data.chart.result[0];
+            let meta = result.meta;
+            let closes = result.indicators?.quote?.[0]?.close || [];
+            let validCloses = closes.filter(c => c !== null && c !== undefined);
+            
+            let current = meta.regularMarketPrice || (validCloses.length > 0 ? validCloses[validCloses.length - 1] : 0);
+            let prev = validCloses.length >= 2 ? validCloses[validCloses.length - 2] : (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null ? meta.chartPreviousClose : meta.previousClose);
+            if(prev === undefined || prev === null || isNaN(prev)) prev = current;
+
+            let diff = current - prev; 
+            let pChange = prev > 0 ? (diff / prev) * 100 : 0;
+            let color = diff >= 0 ? 'green-text' : 'red-text'; 
+            let arrow = diff >= 0 ? '▲' : '▼'; 
+            let sign = diff >= 0 ? '+' : '';
+            let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
+            let diffFormatted = Math.abs(diff).toFixed(2);
+            let pChangeFormatted = Math.abs(pChange).toFixed(2);
+
+            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="${color}">${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted} (${sign}${pChangeFormatted}%)</span>`;
         } catch(e) { document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="red-text">Error</span>`; }
     }
 };
-
 function initApp() {
     if(isAppReady) return; isAppReady = true;
     const MY_SERVER_URL = "https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=";
@@ -301,6 +318,8 @@ function initApp() {
             let maxDate = "--", minDate = "--";
             
             let historyArr = [];
+            let validClosesForPrev = closes.filter(c => c !== null && c !== undefined);
+
             for(let i = 1; i < timestamps.length; i++) {
                 let c = closes[i];
                 if(c === null) continue;
@@ -319,8 +338,11 @@ function initApp() {
             if(maxPrice === 0) maxPrice = meta.regularMarketDayHigh || meta.regularMarketPrice;
             if(minPrice === Infinity) minPrice = meta.regularMarketDayLow || meta.regularMarketPrice;
 
-            let current = meta.regularMarketPrice;
-            let prev = (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null) ? meta.chartPreviousClose : meta.previousClose;
+            let current = meta.regularMarketPrice || (validClosesForPrev.length > 0 ? validClosesForPrev[validClosesForPrev.length - 1] : 0);
+            
+            // FIX: Get previous close directly from historical closes array for 100% accurate price change
+            let prev = validClosesForPrev.length >= 2 ? validClosesForPrev[validClosesForPrev.length - 2] : (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null ? meta.chartPreviousClose : meta.previousClose);
+            if(prev === undefined || prev === null || isNaN(prev)) prev = current;
             
             let diff = current - prev;
             let pChange = prev > 0 ? (diff / prev) * 100 : 0;
