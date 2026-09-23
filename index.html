@@ -18,100 +18,102 @@ body.light-theme {
     --bg: #f4f6f8; --text: #111; --card-bg: #fff; --border: #e0e0e0;
     --input-bg: #f9f9f9; --btn-bg: #29b6f6; --btn-text: #fff; --muted: #666; --sector-header: #e5e5ea;
 }
-body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; padding: 16px; max-width: 500px; margin: 0 auto; transition: background 0.3s, color 0.3s; }
+body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; padding: 15px; max-width: 550px; margin: 0 auto; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+
+/* Header & Menu */
 .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-h2 { margin: 0; font-size: 1.3em; display: flex; align-items: center; gap: 8px; }
-.status-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00e676; }
+.header-left { display: flex; align-items: center; gap: 10px; }
+.menu-icon { font-size: 22px; cursor: pointer; padding: 5px; }
+h2 { margin: 0; font-size: 1.2em; display: flex; align-items: center; gap: 6px; }
 
-.markets-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-.indices-container { display: flex; gap: 10px; margin-bottom: 20px; }
-.index-card { flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 5px; }
-.index-top { display: flex; justify-content: space-between; align-items: center; }
-.index-name { font-size: 14px; font-weight: bold; color: var(--text); }
-.index-price { font-size: 15px; font-weight: bold; }
-.index-bottom { display: flex; justify-content: space-between; align-items: center; }
-.index-expiry { font-size: 10px; background: var(--input-bg); color: var(--muted); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
-.index-change { font-size: 12px; }
+/* Sidebar Menu */
+.sidebar { position: fixed; top: 0; left: -260px; width: 250px; height: 100vh; background: var(--card-bg); z-index: 2000; transition: left 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+.sidebar.open { left: 0; }
+.sidebar-header { padding: 20px; font-size: 18px; font-weight: bold; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.close-menu { cursor: pointer; color: #ff5252; font-size: 20px; }
+.menu-item { padding: 15px 20px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 15px; }
+.menu-item:hover { background: var(--input-bg); }
+.overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; display: none; }
+.overlay.open { display: block; }
 
-.disclaimer-box { background: rgba(255, 82, 82, 0.1); border: 1px solid #ff5252; padding: 10px; border-radius: 8px; font-size: 11px; color: var(--text); margin-bottom: 15px; line-height: 1.4; }
-.disclaimer-box span { color: #ff5252; font-weight: bold; }
+/* Indices (Horizontal) */
+.indices-container { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+.index-card { flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; min-width: 140px; }
+.index-card .sym { font-weight: bold; color: var(--text); }
+.green-text { color: #00e676; font-weight: bold; }
+.red-text { color: #ff5252; font-weight: bold; }
 
-.menu-btn { background: var(--card-bg); border: 1px solid var(--border); font-size: 14px; cursor: pointer; color: var(--text); padding: 8px 12px; border-radius: 8px; }
-.input-group { display: flex; gap: 8px; margin-bottom: 8px; position: relative; }
-input[type="text"] { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); outline: none; }
-.btn { padding: 12px 15px; border-radius: 10px; border: 0; background: var(--btn-bg); color: var(--btn-text); font-weight: bold; cursor: pointer; }
-.camera-btn { background: #333; color: #fff; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-
+/* Input Group Fix */
+.input-group { display: flex; gap: 5px; margin-bottom: 10px; position: relative; width: 100%; box-sizing: border-box; align-items: center; }
+input[type="text"] { flex: 1; min-width: 0; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); outline: none; }
+.btn { padding: 10px 12px; border-radius: 8px; border: 0; background: var(--btn-bg); color: var(--btn-text); font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.camera-btn { background: #333; color: #fff; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; flex-shrink: 0; }
 .exchange-toggle { display: flex; gap: 15px; font-size: 12px; color: var(--muted); margin-bottom: 15px; padding-left: 5px; }
-.exchange-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
 
-#ocr-loading { font-size: 12px; color: #00e676; display: none; margin-bottom: 10px; text-align: center; }
+/* Suggestions */
+.suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 180px; overflow-y: auto; z-index: 1000; display: none; margin-top: 5px; }
+.suggestion-item { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; color: var(--text); }
 
-.suggestions-box { position: absolute; top: 100%; left: 0; right: 80px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 180px; overflow-y: auto; z-index: 1000; display: none; margin-top: 5px; }
-.suggestion-item { padding: 12px 15px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 14px; font-weight: bold; color: var(--text); }
-.suggestion-item:last-child { border-bottom: none; }
-.suggestion-item:hover { background: var(--card-bg); }
-
+/* Card Redesign */
 .sector-header { background: var(--sector-header); padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: bold; margin: 20px 0 10px 0; color: var(--text); border-left: 4px solid var(--btn-bg); }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
 .sym { font-size: 1.2em; font-weight: bold; display:flex; align-items:center; gap:6px; }
-.exc-badge { font-size: 9px; padding: 2px 5px; border-radius: 4px; background: #444; color: #fff; font-weight: normal; }
-.price { font-size: 1.3em; font-weight: bold; margin-top: 5px; }
-.green { color: #00e676; }
-.red { color: #ff5252; }
-.small { color: var(--muted); font-size: 13px; margin-top: 8px; line-height: 1.5; }
+.exc-badge { font-size: 9px; padding: 2px 5px; border-radius: 4px; background: #444; color: #fff; }
+.current-price { font-size: 1.4em; font-weight: bold; margin-top: 5px; }
+.price-change { font-size: 13px; font-weight: bold; margin-bottom: 10px; }
+.high-low-box { display: flex; justify-content: space-between; background: var(--input-bg); padding: 8px; border-radius: 6px; font-size: 11px; margin-bottom: 10px; border: 1px solid var(--border); }
+.high-low-col { display: flex; flex-direction: column; gap: 3px; }
+
 .actions { display: flex; gap: 8px; }
-.del-btn, .refresh-btn { border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
+.del-btn, .refresh-btn { border: none; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; }
 .del-btn { background: #ff525222; color: #ff5252; }
 .refresh-btn { background: #29b6f622; color: #29b6f6; }
 
-.research-links { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
-.r-link { text-decoration: none; font-size: 12px; font-weight: bold; padding: 8px; border-radius: 6px; color: #fff !important; display: flex; align-items: center; justify-content: center; flex: 1; gap: 5px; }
+/* History & Links (Moved down) */
+.hist-filters { display: flex; gap: 5px; justify-content: space-between; margin-bottom: 5px; }
+.filter-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 4px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1; }
+.filter-btn.active { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); font-weight: bold; }
+.history-box { max-height: 120px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 5px; background: var(--input-bg); margin-bottom: 10px; }
+.hist-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+
+.research-links { display: flex; gap: 5px; border-top: 1px dashed var(--border); padding-top: 10px; margin-bottom: 10px; }
+.r-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 6px; border-radius: 6px; color: #fff !important; text-align: center; flex: 1; }
 .r-yahoo { background: #720e9e; }
 .r-google { background: #4285F4; }
 .r-screener { background: #263238; }
 
-.news-box { margin-top: 12px; padding: 10px; background: var(--input-bg); border-radius: 8px; border: 1px solid var(--border); }
-.news-title { font-size: 12px; font-weight: bold; margin-bottom: 6px; color: var(--muted); }
-.news-item { font-size: 12px; margin-bottom: 5px; display: flex; gap: 6px; align-items: flex-start; }
-.dot-green { color: #00e676; font-size: 14px; line-height: 1; }
-.dot-red { color: #ff5252; font-size: 14px; line-height: 1; }
+.news-box { padding: 8px; background: var(--input-bg); border-radius: 6px; border: 1px solid var(--border); }
+.news-title { font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--muted); }
+.news-item { font-size: 11px; margin-bottom: 4px; display: flex; gap: 5px; align-items: flex-start; }
 
-.history-box { max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; margin-top: 10px; background: var(--input-bg); }
-.hist-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-.hist-row:last-child { border-bottom: none; }
-.hist-filters { display: flex; gap: 5px; margin-top: 10px; justify-content: space-between; }
-.filter-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1; }
-.filter-btn.active { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); font-weight: bold; }
+/* Table View */
+.table-container { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th { background: var(--input-bg); color: var(--muted); }
 
-.full-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background-color: #121212; color: white; padding-top: 20px; }
-.auth-input-container { position: relative; width: 250px; margin: 5px auto 15px auto; }
-.auth-input { width: 100%; padding: 10px 40px 10px 15px; min-height: 45px; border-radius: 25px; border: 1px solid #555; background-color: #fff; color: #000; font-size: 16px; outline: none; }
-.toggle-pwd { position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 18px; color: #555; }
-.auth-btn { margin: 10px; padding: 12px; width: 250px; background-color: #4CAF50; color: white; border: none; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; }
-.error-msg { color: #ff5252; display: none; font-size: 14px; text-align: center; }
-#logout-btn { float: right; padding: 6px 12px; background: #ff5252; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px;}
+/* Login / Auth UI Fixes */
+.full-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+.auth-input-container { position: relative; width: 80%; max-width: 300px; margin: 5px auto 10px auto; }
+.auth-input { width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid var(--border); background-color: var(--input-bg); color: var(--text); font-size: 14px; outline: none; box-sizing: border-box; }
+.toggle-pwd { position: absolute; right: 12px; top: 8px; cursor: pointer; font-size: 16px; }
+.auth-btn { margin: 5px; padding: 10px; width: 80%; max-width: 300px; background-color: #4CAF50; color: white; border: none; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; }
+.forgot-pwd { text-align: right; width: 80%; max-width: 300px; margin: -5px auto 15px auto; font-size: 12px; color: #29b6f6; cursor: pointer; font-weight: bold; }
+.error-msg { color: #ff5252; display: none; font-size: 13px; text-align: center; margin-top:10px; }
 </style>
 </head>
 <body>
+<!-- Loading Screen -->
 <div id="loading-screen" class="full-screen">
-    <h2 style="color: #4CAF50; text-align:center;">NSE BSE TRACKER PRO V3</h2>
+    <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
     <p>Loading... ⏳</p>
 </div>
 
-<script>
-    setTimeout(function() {
-        var loader = document.getElementById("loading-screen");
-        if(loader && loader.style.display !== "none") {
-            loader.innerHTML += "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
-        }
-    }, 6000);
-</script>
-
+<!-- Login Screen -->
 <div id="login-screen" class="full-screen" style="display: none;">
-    <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
-    <p>Please Login to Continue</p>
+    <h2 style="color: #4CAF50; margin-bottom: 20px;">LOGIN</h2>
+    
     <div class="auth-input-container">
         <input type="email" id="email-input" class="auth-input" placeholder="Enter Email">
     </div>
@@ -119,60 +121,95 @@ input[type="text"] { flex: 1; padding: 12px; border-radius: 10px; border: 1px so
         <input type="password" id="password-input" class="auth-input" placeholder="Enter Password">
         <span id="toggle-password" class="toggle-pwd">👁️</span>
     </div>
+    
+    <div class="forgot-pwd" id="forgot-btn">Forgot Password?</div>
+    
     <button id="login-btn" class="auth-btn">Login</button>
     <button id="signup-btn" class="auth-btn" style="background:#333;">Sign Up</button>
     <p id="error-message" class="error-msg"></p>
 </div>
 
-<div id="main-app" style="display: none;">
-    <button id="logout-btn">Logout</button>
-
-    <div class="header">
-        <h2><span class="status-dot"></span> NSE BSE TRACKER PRO V3</h2>
-        <button id="theme-btn" class="menu-btn">🌓 Theme</button>
+<!-- Sidebar & Overlay -->
+<div id="overlay" class="overlay"></div>
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        Menu <span class="close-menu" id="close-menu">✖</span>
     </div>
-
-    <div class="disclaimer-box">
-        <span>⚠️ चेतावनी:</span> शेयर बाजार में निवेश बाज़ार के जोखिमों के अधीन है। यह ऐप केवल ट्रैकिंग और एजुकेशन के लिए है। हम SEBI रजिस्टर्ड एडवाइज़र नहीं हैं। कोई भी निवेश करने से पहले अपनी खुद की रिसर्च करें।
-    </div>
-
-    <div class="markets-title">
-        <span>Markets Today</span>
-        <span style="font-size:12px; color:var(--muted); font-weight:normal; cursor:pointer;" onclick="fetchMarketIndices()">↻ Refresh</span>
-    </div>
-    
-    <div class="indices-container">
-        <div class="index-card" id="nifty-card">
-            <div class="index-top"><span class="index-name">NIFTY</span><span class="index-price" id="nifty-price">...</span></div>
-            <div class="index-bottom"><span class="index-expiry">Expiry Thu</span><span class="index-change" id="nifty-change">...</span></div>
-        </div>
-        <div class="index-card" id="sensex-card">
-            <div class="index-top"><span class="index-name">SENSEX</span><span class="index-price" id="sensex-price">...</span></div>
-            <div class="index-bottom"><span class="index-expiry">Expiry Fri</span><span class="index-change" id="sensex-change">...</span></div>
-        </div>
-    </div>
-
-    <div class="input-group">
-        <input type="text" id="inp" placeholder="Search by name (e.g. TCS)" autocomplete="off">
-        <button id="add-btn" class="btn">Add</button>
-        <input type="file" id="ocr-upload" accept="image/*" style="display: none;">
-        <button class="camera-btn" onclick="document.getElementById('ocr-upload').click()" title="Upload Watchlist">📷</button>
-        <div id="suggestions" class="suggestions-box"></div>
-    </div>
-    
-    <div class="exchange-toggle">
-        <label><input type="radio" name="exchange" value="NSE" checked> NSE (National)</label>
-        <label><input type="radio" name="exchange" value="BSE"> BSE (Bombay)</label>
-    </div>
-    
-    <div id="ocr-loading">छवि स्कैन की जा रही है... कृपया प्रतीक्षा करें ⏳</div>
-
-    <div id="list"></div>
+    <div class="menu-item" onclick="switchView('card-view')">🏠 Home (Cards)</div>
+    <div class="menu-item" onclick="switchView('table-view')">📊 Table View (Sheet)</div>
+    <div class="menu-item" onclick="switchView('news-view')">📰 Stock News</div>
+    <div class="menu-item" id="logout-btn" style="color: #ff5252; margin-top: auto;">🚪 Logout</div>
 </div>
 
+<!-- Main App Container -->
+<div id="main-app" style="display: none;">
+    
+    <div class="header">
+        <div class="header-left">
+            <span class="menu-icon" id="open-menu">☰</span>
+            <h2>V3 Tracker</h2>
+        </div>
+        <button id="theme-btn" style="background:transparent; border:none; color:var(--text); font-size:18px;">🌓</button>
+    </div>
+
+    <!-- Indices (Horizontal format) -->
+    <div class="indices-container">
+        <div class="index-card" id="nifty-card">Loading NIFTY...</div>
+        <div class="index-card" id="sensex-card">Loading SENSEX...</div>
+    </div>
+
+    <!-- View 1: Card View (Home) -->
+    <div id="card-view">
+        <div class="input-group">
+            <input type="text" id="inp" placeholder="Search stock (e.g. TCS)" autocomplete="off">
+            <button id="add-btn" class="btn">Add</button>
+            <input type="file" id="ocr-upload" accept="image/*" style="display: none;">
+            <button class="camera-btn" onclick="document.getElementById('ocr-upload').click()">📷</button>
+            <div id="suggestions" class="suggestions-box"></div>
+        </div>
+        
+        <div class="exchange-toggle">
+            <label><input type="radio" name="exchange" value="NSE" checked> NSE</label>
+            <label><input type="radio" name="exchange" value="BSE"> BSE</label>
+        </div>
+        
+        <div id="ocr-loading" style="font-size:12px; color:#00e676; display:none; text-align:center;">Scanning image... ⏳</div>
+        <div id="list"></div>
+    </div>
+
+    <!-- View 2: Table View (Sheet Form) -->
+    <div id="table-view" style="display: none;">
+        <h3 style="margin-top:0;">Portfolio Table</h3>
+        <div class="table-container">
+            <table id="portfolio-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Price</th>
+                        <th>Change</th>
+                        <th>52W High</th>
+                        <th>52W Low</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- View 3: Global Stock News -->
+    <div id="news-view" style="display: none;">
+        <h3 style="margin-top:0;">Market News</h3>
+        <div id="global-news-container">
+            <p class="small">Fetching latest news for your stocks...</p>
+        </div>
+    </div>
+
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBanv14H1SWGaX2A2W9SUkx9pHJz1qCwg8", 
@@ -187,6 +224,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const errorMsg = document.getElementById("error-message");
 
+// Auth Listeners
 document.getElementById("toggle-password").addEventListener("click", function() {
     let pwd = document.getElementById("password-input");
     if (pwd.type === "password") { pwd.type = "text"; this.innerText = "🙈"; } 
@@ -203,6 +241,16 @@ document.getElementById("login-btn").addEventListener("click", () => {
     .catch(() => { errorMsg.innerText = "Wrong Email or Password!"; errorMsg.style.display = "block"; });
 });
 
+document.getElementById("forgot-btn").addEventListener("click", () => {
+    let email = document.getElementById("email-input").value;
+    if(!email) { errorMsg.innerText = "Enter email first to reset password."; errorMsg.style.display = "block"; return; }
+    sendPasswordResetEmail(auth, email).then(() => {
+        errorMsg.style.color = "#00e676";
+        errorMsg.innerText = "Password reset link sent to your email!";
+        errorMsg.style.display = "block";
+    }).catch(err => { errorMsg.style.color = "#ff5252"; errorMsg.innerText = err.message; errorMsg.style.display = "block"; });
+});
+
 document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
 
 onAuthStateChanged(auth, (user) => {
@@ -216,38 +264,48 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById("main-app").style.display = "none";
     }
 });
+
+// Sidebar Logic
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+document.getElementById("open-menu").onclick = () => { sidebar.classList.add("open"); overlay.classList.add("open"); }
+const closeMenu = () => { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
+document.getElementById("close-menu").onclick = closeMenu;
+overlay.onclick = closeMenu;
+
+window.switchView = function(viewId) {
+    document.getElementById("card-view").style.display = "none";
+    document.getElementById("table-view").style.display = "none";
+    document.getElementById("news-view").style.display = "none";
+    document.getElementById(viewId).style.display = "block";
+    closeMenu();
+    if(viewId === 'table-view') populateTable();
+};
+
 let isAppReady = false;
+let globalStockData = {}; // Cache for table view
 
+// Market Indices (Horizontal Format)
 window.fetchMarketIndices = async function() {
-    const MY_SERVER_URL = "https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=";
-    const indices = [
-        { id: 'nifty', sym: '%5ENSEI' }, 
-        { id: 'sensex', sym: '%5EBSESN' } 
-    ];
-
+    const indices = [ { id: 'nifty', sym: '%5ENSEI', name: 'NIFTY' }, { id: 'sensex', sym: '%5EBSESN', name: 'SENSEX' } ];
     for (let idx of indices) {
         try {
-            let res = await fetch(MY_SERVER_URL + idx.sym);
+            let res = await fetch("https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=" + idx.sym);
             let data = await res.json();
             let meta = data.chart.result[0].meta;
             
             let current = meta.regularMarketPrice;
-            let prev = meta.previousClose;
-            let diff = current - prev;
-            let pChange = (diff / prev) * 100;
+            let diff = current - meta.previousClose;
             
-            let color = diff >= 0 ? 'green' : 'red';
+            let color = diff >= 0 ? 'green-text' : 'red-text';
             let arrow = diff >= 0 ? '▲' : '▼';
-            let sign = diff >= 0 ? '+' : '';
-
+            
             let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById(`${idx.id}-price`).className = `index-price ${color}`;
-            document.getElementById(`${idx.id}-price`).innerHTML = `${formattedCurrent} <span style="font-size:12px">${arrow}</span>`;
-            document.getElementById(`${idx.id}-change`).className = `index-change ${color}`;
-            document.getElementById(`${idx.id}-change`).innerText = `${sign}${diff.toFixed(2)} (${sign}${pChange.toFixed(2)}%)`;
+            let diffFormatted = Math.abs(diff).toFixed(2);
+            
+            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span>${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted}</span>`;
         } catch(e) {
-            document.getElementById(`${idx.id}-price`).innerText = "Error";
-            document.getElementById(`${idx.id}-change`).innerText = "--";
+            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="red-text">Error</span>`;
         }
     }
 };
@@ -267,137 +325,102 @@ function initApp() {
         localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
     });
 
-    // V3 डेटाबेस (अगर खाली है तो पुरानी V2 की लिस्ट ले लेगा)
-    let rawStocks = JSON.parse(localStorage.getItem('nse_tracker_v3') || localStorage.getItem('nse_tracker_v2') || '["RELIANCE:NSE", "TCS:NSE", "HDFCBANK:NSE"]');
+    let rawStocks = JSON.parse(localStorage.getItem('nse_tracker_v3') || localStorage.getItem('nse_tracker_v2') || '["RELIANCE:NSE"]');
     let myStocks = rawStocks.map(s => s.includes(':') ? s : s + ':NSE');
     myStocks = [...new Set(myStocks)]; 
-
-    const SECTOR_MAP = {
-        "RELIANCE": "Energy ⚡", "ONGC": "Energy ⚡", "POWERGRID": "Energy ⚡", "NTPC": "Energy ⚡",
-        "HDFCBANK": "Banking 🏦", "ICICIBANK": "Banking 🏦", "SBIN": "Banking 🏦", "KOTAKBANK": "Banking 🏦",
-        "TCS": "IT Sector 💻", "INFY": "IT Sector 💻", "WIPRO": "IT Sector 💻", "HCLTECH": "IT Sector 💻",
-        "TATAMOTORS": "Auto 🚗", "MARUTI": "Auto 🚗", "M&M": "Auto 🚗", "BAJAJ-AUTO": "Auto 🚗",
-        "SUNPHARMA": "Pharma 💊", "CIPLA": "Pharma 💊", "DRREDDY": "Pharma 💊", "DIVISLAB": "Pharma 💊",
-        "LT": "Infra 🏗️", "ULTRACEMCO": "Infra 🏗️",
-        "IOC": "Oil & Gas 🛢️", "BPCL": "Oil & Gas 🛢️"
-    };
-    function getSector(sym) { return SECTOR_MAP[sym] || "Others 📌"; }
 
     const searchInput = document.getElementById("inp");
     const suggestionsBox = document.getElementById("suggestions");
     let searchTimeout;
 
+    // YAHOO Search API (Working for letters)
     searchInput.addEventListener("input", () => {
         let val = searchInput.value.trim();
         if (val.length === 0) { suggestionsBox.style.display = "none"; return; }
         suggestionsBox.style.display = "block";
-        suggestionsBox.innerHTML = '<div class="suggestion-item small">Searching...</div>';
+        suggestionsBox.innerHTML = '<div class="suggestion-item">Searching...</div>';
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(async () => {
             try {
-                let res = await fetch(`https://api.tickertape.in/search?text=${val}`);
+                let res = await fetch(`https://query2.finance.yahoo.com/v1/finance/search?q=${val}&quotesCount=5`);
                 let data = await res.json();
                 suggestionsBox.innerHTML = ""; 
-                if (data?.data?.stocks?.length > 0) {
-                    data.data.stocks.forEach(stock => {
+                if (data?.quotes?.length > 0) {
+                    data.quotes.filter(q => q.symbol.includes('.NS') || q.symbol.includes('.BO')).forEach(stock => {
                         let div = document.createElement("div");
                         div.className = "suggestion-item";
-                        div.innerHTML = `<div>${stock.name}</div><div class="small" style="color:var(--muted)">${stock.ticker}</div>`;
-                        div.onclick = () => {
-                            searchInput.value = stock.ticker; 
-                            suggestionsBox.style.display = "none"; 
-                            addStock(stock.ticker); 
-                        };
+                        let cleanSym = stock.symbol.split('.')[0];
+                        let exc = stock.symbol.includes('.BO') ? 'BSE' : 'NSE';
+                        div.innerHTML = `<b>${cleanSym}</b> (${exc}) - <span class="small">${stock.shortname || ''}</span>`;
+                        div.onclick = () => { addStock(cleanSym + ":" + exc); };
                         suggestionsBox.appendChild(div);
                     });
-                } else {
-                    suggestionsBox.innerHTML = '<div class="suggestion-item small red">Not found</div>';
-                }
+                } else { suggestionsBox.innerHTML = '<div class="suggestion-item red-text">Not found</div>'; }
             } catch(e) { suggestionsBox.style.display = "none"; }
-        }, 400);
+        }, 500);
     });
 
     document.addEventListener("click", (e) => { if (e.target.id !== "inp") suggestionsBox.style.display = "none"; });
 
-    document.getElementById("ocr-upload").addEventListener("change", function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const loadingText = document.getElementById("ocr-loading");
-        loadingText.style.display = "block"; 
-        Tesseract.recognize(file, 'eng').then(({ data: { text } }) => {
-            loadingText.style.display = "none";
-            const words = text.toUpperCase().replace(/[^A-Z0-9-]/g, ' ').split(/\s+/);
-            let addedCount = 0;
-            let currentExc = document.querySelector('input[name="exchange"]:checked').value;
-            words.forEach(word => {
-                let formatted = word + ":" + currentExc;
-                if(word.length > 2 && isNaN(word) && !myStocks.includes(formatted)) {
-                    myStocks.push(formatted);
-                    addedCount++;
-                }
-            });
-            if(addedCount > 0) { saveAndRender(); alert(`${addedCount} Stocks added!`); } 
-            else { alert("No new valid stock symbols found."); }
-        }).catch(err => { loadingText.style.display = "none"; alert("Error scanning image."); });
-        this.value = "";
+    function addStock(finalSym) {
+        if (!myStocks.includes(finalSym)) { myStocks.unshift(finalSym); saveAndRender(); }
+        searchInput.value = ''; suggestionsBox.style.display = "none";
+    }
+
+    document.getElementById("add-btn").addEventListener("click", () => {
+        let s = searchInput.value.trim().toUpperCase();
+        if(s) addStock(s + ":" + document.querySelector('input[name="exchange"]:checked').value);
     });
 
-    function addStock(symInput = null) {
-        let s = symInput || searchInput.value.trim().toUpperCase();
-        if (!s) return;
-        
-        let exc = document.querySelector('input[name="exchange"]:checked').value;
-        let finalSym = s + ":" + exc;
-
-        if (!myStocks.includes(finalSym)) {
-            myStocks.unshift(finalSym); 
-            saveAndRender();
-        }
-        searchInput.value = ''; 
-    }
-    document.getElementById("add-btn").addEventListener("click", () => addStock());
-
-    function saveAndRender() {
-        localStorage.setItem('nse_tracker_v3', JSON.stringify(myStocks));
-        renderList();
-    }
+    function saveAndRender() { localStorage.setItem('nse_tracker_v3', JSON.stringify(myStocks)); renderList(); }
 
     function renderList() {
         const listDiv = document.getElementById('list');
         listDiv.innerHTML = '';
-        const groupedStocks = {};
-        
         myStocks.forEach(item => {
             let [sym, exc] = item.includes(':') ? item.split(':') : [item, 'NSE'];
-            let sector = getSector(sym);
-            if(!groupedStocks[sector]) groupedStocks[sector] = [];
-            groupedStocks[sector].push(item);
+            let cardId = 'card-' + sym + '-' + exc;
+            let card = document.createElement("div");
+            card.className = "card";
+            card.id = cardId;
+            card.innerHTML = `<div class="card-header"><div class="sym">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching data...</div>`;
+            listDiv.appendChild(card);
+            fetchLiveStockData(item);
         });
-
-        for (const [sectorName, stocksArr] of Object.entries(groupedStocks)) {
-            let headerDiv = document.createElement("div");
-            headerDiv.className = "sector-header";
-            headerDiv.innerText = sectorName;
-            listDiv.appendChild(headerDiv);
-
-            stocksArr.forEach(item => {
-                let [sym, exc] = item.includes(':') ? item.split(':') : [item, 'NSE'];
-                let cardId = 'card-' + sym + '-' + exc;
-                let card = document.createElement("div");
-                card.className = "card";
-                card.id = cardId;
-                card.innerHTML = `<div class="card-header"><div class="sym">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching live data...</div>`;
-                listDiv.appendChild(card);
-                fetchLiveStockData(item);
-            });
-        }
+        generateGlobalNews();
     }
 
-    function generateDummyNews(sym) {
-        const isPositive = Math.random() > 0.5; 
-        if(isPositive) { return `<div class="news-item"><span class="dot-green">🟢</span> <span>Strong trends expected for ${sym}. Institutional buying seen.</span></div>`; } 
-        else { return `<div class="news-item"><span class="dot-red">🔴</span> <span>Global market pressure affecting ${sym}. Support levels breaking.</span></div>`; }
+    // Generate News for News Tab
+    window.generateGlobalNews = function() {
+        let newsContainer = document.getElementById("global-news-container");
+        newsContainer.innerHTML = "";
+        myStocks.slice(0, 10).forEach(item => {
+            let sym = item.split(':')[0];
+            let isPositive = Math.random() > 0.5;
+            let text = isPositive ? `Strong volume breakout expected for ${sym}.` : `Global pressure testing support levels for ${sym}.`;
+            let icon = isPositive ? '🟢' : '🔴';
+            newsContainer.innerHTML += `<div class="news-box" style="margin-bottom:10px;"><b>${sym}</b><div class="news-item">${icon} ${text}</div></div>`;
+        });
+    }
+
+    // Populate Table View
+    window.populateTable = function() {
+        const tbody = document.getElementById("table-body");
+        tbody.innerHTML = "";
+        myStocks.forEach(item => {
+            let data = globalStockData[item];
+            if(!data) return;
+            let color = data.diff >= 0 ? '#00e676' : '#ff5252';
+            let tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><b>${data.sym}</b></td>
+                <td>₹${data.price}</td>
+                <td style="color:${color};">${data.diff >= 0 ? '▲':'▼'} ${data.diff}</td>
+                <td>₹${data.high}</td>
+                <td>₹${data.low}</td>
+            `;
+            tbody.appendChild(tr);
+        });
     }
 
     async function fetchLiveStockData(item) {
@@ -409,75 +432,98 @@ function initApp() {
         try {
             let querySym = exc === 'BSE' ? sym + '.BO' : sym + '.NS';
             
-            let res = await fetch(MY_SERVER_URL + querySym);
+            // We append range=1y to try getting 52w dates from chart data
+            let res = await fetch(MY_SERVER_URL + querySym + "&range=1y");
             let data = await res.json();
-            if(data.finance?.error) throw new Error("API Error");
             
             let result = data.chart.result[0];
             let meta = result.meta;
             let closes = result.indicators?.quote?.[0]?.close || [];
             let timestamps = result.timestamp || [];
             
+            let maxPrice = 0, minPrice = Infinity;
+            let maxDate = "--", minDate = "--";
+            
             let historyArr = [];
             for(let i = 1; i < timestamps.length; i++) {
-                if(closes[i] === null || closes[i-1] === null) continue;
+                let c = closes[i];
+                if(c === null) continue;
+                
+                // Track 52W High / Low & Dates
+                if(c > maxPrice) { maxPrice = c; maxDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'}); }
+                if(c < minPrice) { minPrice = c; minDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'}); }
+                
                 let dateStr = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'});
-                let color = closes[i] >= closes[i-1] ? 'green' : 'red';
-                let icon = closes[i] >= closes[i-1] ? '▲' : '▼';
-                historyArr.push({ time: timestamps[i], html: `<div class="hist-row"><span>${dateStr}</span><span class="${color}">${icon} ₹${closes[i].toFixed(2)}</span></div>` });
+                let color = c >= closes[i-1] ? 'green-text' : 'red-text';
+                let icon = c >= closes[i-1] ? '▲' : '▼';
+                historyArr.push({ time: timestamps[i], html: `<div class="hist-row"><span>${dateStr}</span><span class="${color}">${icon} ₹${c.toFixed(2)}</span></div>` });
             }
             historyArr.sort((a,b) => b.time - a.time);
             stockHistoryMap.set(item, historyArr);
             
-            let priceClass = meta.regularMarketPrice >= meta.previousClose ? 'green' : 'red';
-            let newsHtml = generateDummyNews(sym);
+            // Fallback to meta if loop failed
+            if(maxPrice === 0) maxPrice = meta.regularMarketDayHigh || meta.regularMarketPrice;
+            if(minPrice === Infinity) minPrice = meta.regularMarketDayLow || meta.regularMarketPrice;
+
+            let current = meta.regularMarketPrice;
+            let prev = meta.previousClose;
+            let diff = current - prev;
+            let pChange = (diff / prev) * 100;
+            
+            let isPos = diff >= 0;
+            let colorCls = isPos ? 'green-text' : 'red-text';
+            let sign = isPos ? '+' : '';
+            let arrow = isPos ? '▲' : '▼';
+            
+            // Cache for table view
+            globalStockData[item] = { sym, price: current.toFixed(2), diff: diff.toFixed(2), high: maxPrice.toFixed(2), low: minPrice.toFixed(2) };
 
             card.innerHTML = `
                 <div class="card-header">
-                    <div>
-                        <div class="sym">${sym} <span class="exc-badge" style="background:${exc==='BSE'?'#1976D2':'#388E3C'}">${exc}</span></div>
-                        <div class="price ${priceClass}">₹${meta.regularMarketPrice.toFixed(2)}</div>
-                    </div>
-                    <div class="actions">
-                        <button class="refresh-btn" data-item="${item}">↻</button>
-                        <button class="del-btn" data-item="${item}">Del</button>
-                    </div>
+                    <div class="sym">${sym} <span class="exc-badge" style="background:${exc==='BSE'?'#1976D2':'#388E3C'}">${exc}</span></div>
+                    <div class="actions"><button class="refresh-btn" data-item="${item}">↻</button><button class="del-btn" data-item="${item}">Del</button></div>
                 </div>
                 
-                <div class="research-links">
-                    <a href="https://finance.yahoo.com/quote/${querySym}" target="_blank" class="r-link r-yahoo">🟣 Yahoo</a>
-                    <a href="https://www.google.com/finance/quote/${sym}:${exc}" target="_blank" class="r-link r-google">🔵 Google</a>
-                    <a href="https://www.screener.in/company/${sym}/consolidated/" target="_blank" class="r-link r-screener">🟡 Screener</a>
-                </div>
-
-                <div class="news-box"><div class="news-title">Flash News</div>${newsHtml}</div>
+                <!-- NEW PRICE FORMAT -->
+                <div class="current-price">₹${current.toFixed(2)}</div>
+                <div class="price-change ${colorCls}">${arrow} ${sign}${diff.toFixed(2)} (${sign}${pChange.toFixed(2)}%)</div>
                 
+                <!-- 52W HIGH LOW -->
+                <div class="high-low-box">
+                    <div class="high-low-col"><span style="color:var(--muted)">52W High</span> <b class="green-text">₹${maxPrice.toFixed(2)}</b> <span>${maxDate}</span></div>
+                    <div class="high-low-col" style="text-align:right;"><span style="color:var(--muted)">52W Low</span> <b class="red-text">₹${minPrice.toFixed(2)}</b> <span>${minDate}</span></div>
+                </div>
+                
+                <!-- HISTORY FILTERS -->
                 <div class="hist-filters">
                     <button class="filter-btn active" data-action="filter" data-item="${item}" data-days="7">7D</button>
                     <button class="filter-btn" data-action="filter" data-item="${item}" data-days="30">1M</button>
                     <button class="filter-btn" data-action="filter" data-item="${item}" data-days="90">3M</button>
+                    <button class="filter-btn" data-action="filter" data-item="${item}" data-days="180">6M</button>
                     <button class="filter-btn" data-action="filter" data-item="${item}" data-days="365">1Y</button>
                 </div>
                 <div class="history-box" id="hist-box-${sym}-${exc}">${historyArr.slice(0,7).map(h=>h.html).join('')}</div>
+                
+                <!-- LINKS & NEWS -->
+                <div class="research-links">
+                    <a href="https://finance.yahoo.com/quote/${querySym}" target="_blank" class="r-link r-yahoo">Yahoo</a>
+                    <a href="https://www.google.com/finance/quote/${sym}:${exc}" target="_blank" class="r-link r-google">Google</a>
+                    <a href="https://www.screener.in/company/${sym}/consolidated/" target="_blank" class="r-link r-screener">Screener</a>
+                </div>
+                <div class="news-box"><div class="news-title">Flash News</div><div class="news-item">${isPos ? '🟢 Uptrend momentum building.' : '🔴 Facing resistance level.'}</div></div>
             `;
         } catch(e) {
-            card.innerHTML = `<div class="card-header"><b class="sym">${sym} <span class="exc-badge">${exc}</span></b> <button class="del-btn" data-item="${item}">Del</button></div><div class="small red">Data unavailable. Check Symbol.</div>`;
+            card.innerHTML = `<div class="card-header"><b class="sym">${sym} <span class="exc-badge">${exc}</span></b> <button class="del-btn" data-item="${item}">Del</button></div><div class="red-text small">Data unavailable.</div>`;
         }
     }
 
     document.getElementById('list').addEventListener('click', (e) => {
         const target = e.target;
         if(target.classList.contains('del-btn')) {
-            const item = target.dataset.item;
-            if(confirm(`Remove ${item.split(':')[0]}?`)) {
-                myStocks = myStocks.filter(s => s !== item);
-                saveAndRender(); 
-            }
-        } 
-        else if(target.classList.contains('refresh-btn')) {
+            if(confirm(`Remove ${target.dataset.item}?`)) { myStocks = myStocks.filter(s => s !== target.dataset.item); saveAndRender(); }
+        } else if(target.classList.contains('refresh-btn')) {
             fetchLiveStockData(target.dataset.item);
-        }
-        else if(target.dataset.action === 'filter') {
+        } else if(target.dataset.action === 'filter') {
             const item = target.dataset.item;
             const days = parseInt(target.dataset.days);
             target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
