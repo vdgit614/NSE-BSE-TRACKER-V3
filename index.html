@@ -85,13 +85,15 @@ th { background: var(--input-bg); color: var(--muted); }
 <div id="loading-screen" class="full-screen">
     <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
     <p>Loading... ⏳</p>
+    <div id="fallback-message"></div>
 </div>
 
 <script>
     setTimeout(function() {
         var loader = document.getElementById("loading-screen");
-        if(loader && loader.style.display !== "none") {
-            loader.innerHTML += "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
+        var msg = document.getElementById("fallback-message");
+        if(loader && loader.style.display !== "none" && msg) {
+            msg.innerHTML = "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
         }
     }, 6000);
 </script>
@@ -155,7 +157,6 @@ th { background: var(--input-bg); color: var(--muted); }
             </label>
         </div>
         
-        <!-- OCR Loading Indicator -->
         <div id="ocr-loading" style="font-size:13px; font-weight:bold; color:#00e676; display:none; text-align:center; margin-bottom:10px; background:var(--card-bg); padding:10px; border-radius:8px; border:1px solid var(--border);"></div>
         
         <div id="list"></div>
@@ -190,78 +191,29 @@ th { background: var(--input-bg); color: var(--muted); }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBanv14H1SWGaX2A2W9SUkx9pHJz1qCwg8", 
-    authDomain: "nse-bse-tracker-9ab75.firebaseapp.com",
-    projectId: "nse-bse-tracker-9ab75",
-    storageBucket: "nse-bse-tracker-9ab75.firebasestorage.app",
-    messagingSenderId: "192783633087",
-    appId: "1:192783633087:web:3999b0d555e6227fa3540a"
-};
+try {
+    const firebaseConfig = { apiKey: "AIzaSyBanv14H1SWGaX2A2W9SUkx9pHJz1qCwg8", authDomain: "nse-bse-tracker-9ab75.firebaseapp.com", projectId: "nse-bse-tracker-9ab75", storageBucket: "nse-bse-tracker-9ab75.firebasestorage.app", messagingSenderId: "192783633087", appId: "1:192783633087:web:3999b0d555e6227fa3540a" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const errorMsg = document.getElementById("error-message");
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const errorMsg = document.getElementById("error-message");
+    document.getElementById("toggle-password").addEventListener("click", function() { let pwd = document.getElementById("password-input"); if (pwd.type === "password") { pwd.type = "text"; this.innerText = "🙈"; } else { pwd.type = "password"; this.innerText = "👁️"; } });
+    document.getElementById("signup-btn").addEventListener("click", () => { createUserWithEmailAndPassword(auth, document.getElementById("email-input").value, document.getElementById("password-input").value).catch(error => { errorMsg.innerText = error.message; errorMsg.style.display = "block"; }); });
+    document.getElementById("login-btn").addEventListener("click", () => { signInWithEmailAndPassword(auth, document.getElementById("email-input").value, document.getElementById("password-input").value).catch(() => { errorMsg.innerText = "Wrong Email or Password!"; errorMsg.style.display = "block"; }); });
+    document.getElementById("forgot-btn").addEventListener("click", () => { let email = document.getElementById("email-input").value; if(!email) { errorMsg.innerText = "Enter email first to reset password."; errorMsg.style.display = "block"; return; } sendPasswordResetEmail(auth, email).then(() => { errorMsg.style.color = "#00e676"; errorMsg.innerText = "Password reset link sent to your email!"; errorMsg.style.display = "block"; }).catch(err => { errorMsg.style.color = "#ff5252"; errorMsg.innerText = err.message; errorMsg.style.display = "block"; }); });
 
-document.getElementById("toggle-password").addEventListener("click", function() {
-    let pwd = document.getElementById("password-input");
-    if (pwd.type === "password") { pwd.type = "text"; this.innerText = "🙈"; } 
-    else { pwd.type = "password"; this.innerText = "👁️"; }
-});
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const closeMenu = () => { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
+    document.getElementById("logout-btn").addEventListener("click", () => { closeMenu(); signOut(auth); });
 
-document.getElementById("signup-btn").addEventListener("click", () => {
-    createUserWithEmailAndPassword(auth, document.getElementById("email-input").value, document.getElementById("password-input").value)
-    .catch(error => { errorMsg.innerText = error.message; errorMsg.style.display = "block"; });
-});
+    onAuthStateChanged(auth, (user) => { document.getElementById("loading-screen").style.display = "none"; if (user) { document.getElementById("login-screen").style.display = "none"; document.getElementById("main-app").style.display = "block"; initApp(); } else { document.getElementById("login-screen").style.display = "flex"; document.getElementById("main-app").style.display = "none"; } });
+    document.getElementById("open-menu").onclick = () => { sidebar.classList.add("open"); overlay.classList.add("open"); }
+    document.getElementById("close-menu").onclick = closeMenu;
+    overlay.onclick = closeMenu;
+} catch (err) { document.getElementById("fallback-message").innerHTML = "<br><p style='color:#ff5252; font-size:14px; text-align:center;'>Database initialization failed.<br>Please disable AdBlocker or check your internet connection.</p>"; }
 
-document.getElementById("login-btn").addEventListener("click", () => {
-    signInWithEmailAndPassword(auth, document.getElementById("email-input").value, document.getElementById("password-input").value)
-    .catch(() => { errorMsg.innerText = "Wrong Email or Password!"; errorMsg.style.display = "block"; });
-});
-
-document.getElementById("forgot-btn").addEventListener("click", () => {
-    let email = document.getElementById("email-input").value;
-    if(!email) { errorMsg.innerText = "Enter email first to reset password."; errorMsg.style.display = "block"; return; }
-    sendPasswordResetEmail(auth, email).then(() => {
-        errorMsg.style.color = "#00e676";
-        errorMsg.innerText = "Password reset link sent to your email!";
-        errorMsg.style.display = "block";
-    }).catch(err => { errorMsg.style.color = "#ff5252"; errorMsg.innerText = err.message; errorMsg.style.display = "block"; });
-});
-
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-const closeMenu = () => { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
-
-document.getElementById("logout-btn").addEventListener("click", () => {
-    closeMenu(); 
-    signOut(auth);
-});
-
-onAuthStateChanged(auth, (user) => {
-    document.getElementById("loading-screen").style.display = "none";
-    if (user) {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("main-app").style.display = "block";
-        initApp(); 
-    } else {
-        document.getElementById("login-screen").style.display = "flex";
-        document.getElementById("main-app").style.display = "none";
-    }
-});
-
-document.getElementById("open-menu").onclick = () => { sidebar.classList.add("open"); overlay.classList.add("open"); }
-document.getElementById("close-menu").onclick = closeMenu;
-overlay.onclick = closeMenu;
-
-window.switchView = function(viewId) {
-    document.getElementById("card-view").style.display = "none";
-    document.getElementById("table-view").style.display = "none";
-    document.getElementById("news-view").style.display = "none";
-    document.getElementById(viewId).style.display = "block";
-    closeMenu();
-    if(viewId === 'table-view') populateTable();
-};
+window.switchView = function(viewId) { document.getElementById("card-view").style.display = "none"; document.getElementById("table-view").style.display = "none"; document.getElementById("news-view").style.display = "none"; document.getElementById(viewId).style.display = "block"; if(typeof closeMenu !== 'undefined') document.getElementById("sidebar").classList.remove("open"); if(typeof closeMenu !== 'undefined') document.getElementById("overlay").classList.remove("open"); if(viewId === 'table-view' && typeof populateTable === 'function') populateTable(); };
 
 let isAppReady = false;
 let globalStockData = {}; 
@@ -270,209 +222,65 @@ window.fetchMarketIndices = async function() {
     const indices = [ { id: 'nifty', sym: '%5ENSEI', name: 'NIFTY' }, { id: 'sensex', sym: '%5EBSESN', name: 'SENSEX' } ];
     for (let idx of indices) {
         try {
-            let res = await fetch("https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=" + idx.sym);
-            let data = await res.json();
-            
-            let meta = data.chart.result[0].meta;
-            let current = meta.regularMarketPrice;
-            
-            let prev = (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null) ? meta.chartPreviousClose : meta.previousClose;
-            let diff = current - prev;
-            
-            let color = diff >= 0 ? 'green-text' : 'red-text';
-            let arrow = diff >= 0 ? '▲' : '▼';
-            
-            let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            let diffFormatted = Math.abs(diff).toFixed(2);
-            
+            let res = await fetch("https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=" + idx.sym); let data = await res.json();
+            let meta = data.chart.result[0].meta; let current = meta.regularMarketPrice; let prev = (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null) ? meta.chartPreviousClose : meta.previousClose; let diff = current - prev; let color = diff >= 0 ? 'green-text' : 'red-text'; let arrow = diff >= 0 ? '▲' : '▼'; let formattedCurrent = current.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}); let diffFormatted = Math.abs(diff).toFixed(2);
             document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="${color}">${formattedCurrent}</span> <span class="${color}">${arrow} ${diffFormatted}</span>`;
-        } catch(e) {
-            document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="red-text">Error</span>`;
-        }
+        } catch(e) { document.getElementById(`${idx.id}-card`).innerHTML = `<span class="sym">${idx.name}</span> <span class="red-text">Error</span>`; }
     }
 };
 
 function initApp() {
-    if(isAppReady) return; 
-    isAppReady = true;
-
+    if(isAppReady) return; isAppReady = true;
     const MY_SERVER_URL = "https://dry-king-2d0b.vasimbhaipainter.workers.dev/?sym=";
     const stockHistoryMap = new Map();
-
     window.fetchMarketIndices();
 
     if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
-    document.getElementById("theme-btn").addEventListener("click", () => {
-        document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-    });
+    document.getElementById("theme-btn").addEventListener("click", () => { document.body.classList.toggle('light-theme'); localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark'); });
 
     let rawStocks = JSON.parse(localStorage.getItem('nse_tracker_v3') || localStorage.getItem('nse_tracker_v2') || '["RELIANCE:NSE"]');
-    let myStocks = rawStocks.map(s => s.includes(':') ? s : s + ':NSE');
-    myStocks = [...new Set(myStocks)]; 
+    let myStocks = rawStocks.map(s => s.includes(':') ? s : s + ':NSE'); myStocks = [...new Set(myStocks)]; 
 
-    const searchInput = document.getElementById("inp");
-    const suggestionsBox = document.getElementById("suggestions");
-    let searchTimeout;
-
-    // FULLY DYNAMIC API-BASED SEARCH (Lightweight & covers all stocks)
+    const searchInput = document.getElementById("inp"); const suggestionsBox = document.getElementById("suggestions"); let searchTimeout;
     searchInput.addEventListener("input", () => {
-        let val = searchInput.value.trim().toUpperCase();
-        if (val.length === 0) { suggestionsBox.style.display = "none"; return; }
-        
-        suggestionsBox.style.display = "block";
-        suggestionsBox.innerHTML = '<div class="suggestion-item" style="color:var(--btn-bg);">Searching market... ⏳</div>';
-        
-        clearTimeout(searchTimeout);
-        // Reduced timeout to 300ms for faster, snappy autocomplete response
-        searchTimeout = setTimeout(async () => {
+        let val = searchInput.value.trim().toUpperCase(); if (val.length === 0) { suggestionsBox.style.display = "none"; return; }
+        suggestionsBox.style.display = "block"; suggestionsBox.innerHTML = '<div class="suggestion-item" style="color:var(--btn-bg);">Searching market... ⏳</div>';
+        clearTimeout(searchTimeout); searchTimeout = setTimeout(async () => {
             try {
-                let res = await fetch(`https://query2.finance.yahoo.com/v1/finance/search?q=${val}&quotesCount=15`);
-                let data = await res.json();
-                
-                let apiHtml = "";
+                let res = await fetch(`https://query2.finance.yahoo.com/v1/finance/search?q=${val}&quotesCount=15`); let data = await res.json(); let apiHtml = "";
                 if (data?.quotes?.length > 0) {
-                    // Filter specifically for Indian exchanges (.NS for NSE, .BO for BSE)
-                    data.quotes.filter(q => q.symbol.includes('.NS') || q.symbol.includes('.BO')).forEach(stock => {
-                        let cleanSym = stock.symbol.split('.')[0];
-                        let exc = stock.symbol.includes('.BO') ? 'BSE' : 'NSE';
-                        let companyName = stock.shortname || cleanSym;
-                        apiHtml += `<div class="suggestion-item api-match" data-sym="${cleanSym}" data-exc="${exc}"><b>${cleanSym}</b> <span class="exc-badge">${exc}</span> - <span class="small" style="color:var(--muted); font-size:11px;">${companyName}</span></div>`;
-                    });
+                    data.quotes.filter(q => q.symbol.includes('.NS') || q.symbol.includes('.BO')).forEach(stock => { let cleanSym = stock.symbol.split('.')[0]; let exc = stock.symbol.includes('.BO') ? 'BSE' : 'NSE'; let companyName = stock.shortname || cleanSym; apiHtml += `<div class="suggestion-item api-match" data-sym="${cleanSym}" data-exc="${exc}"><b>${cleanSym}</b> <span class="exc-badge">${exc}</span> - <span class="small" style="color:var(--muted); font-size:11px;">${companyName}</span></div>`; });
                 }
-                
-                if (apiHtml) {
-                    suggestionsBox.innerHTML = apiHtml;
-                    // Bind clicks to the new dynamic items
-                    let items = suggestionsBox.querySelectorAll('.suggestion-item[data-sym]');
-                    items.forEach(item => {
-                        item.onclick = () => { addStock(item.dataset.sym + ":" + item.dataset.exc); };
-                    });
-                } else {
-                    suggestionsBox.innerHTML = '<div class="suggestion-item red-text">No matching stocks found</div>';
-                }
-            } catch(e) { 
-                suggestionsBox.innerHTML = '<div class="suggestion-item red-text">Error fetching results</div>'; 
-            }
+                if (apiHtml) { suggestionsBox.innerHTML = apiHtml; let items = suggestionsBox.querySelectorAll('.suggestion-item[data-sym]'); items.forEach(item => { item.onclick = () => { addStock(item.dataset.sym + ":" + item.dataset.exc); }; }); } else { suggestionsBox.innerHTML = '<div class="suggestion-item red-text">No matching stocks found</div>'; }
+            } catch(e) { suggestionsBox.innerHTML = '<div class="suggestion-item red-text">Error fetching results</div>'; }
         }, 300); 
     });
 
     document.addEventListener("click", (e) => { if (e.target.id !== "inp") suggestionsBox.style.display = "none"; });
-
-    function addStock(finalSym) {
-        if (!myStocks.includes(finalSym)) { myStocks.unshift(finalSym); saveAndRender(); }
-        searchInput.value = ''; suggestionsBox.style.display = "none";
-    }
-
-    document.getElementById("add-btn").addEventListener("click", () => {
-        let s = searchInput.value.trim().toUpperCase();
-        if(s) addStock(s + ":" + document.querySelector('input[name="exchange"]:checked').value);
-    });
+    function addStock(finalSym) { if (!myStocks.includes(finalSym)) { myStocks.unshift(finalSym); saveAndRender(); } searchInput.value = ''; suggestionsBox.style.display = "none"; }
+    document.getElementById("add-btn").addEventListener("click", () => { let s = searchInput.value.trim().toUpperCase(); if(s) addStock(s + ":" + document.querySelector('input[name="exchange"]:checked').value); });
 
     document.getElementById('ocr-upload').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if(!file) return;
-        
-        const loading = document.getElementById('ocr-loading');
-        loading.style.display = 'block';
-        loading.innerText = "📸 Scanning Screenshot... Please wait ⏳";
-        
-        Tesseract.recognize(file, 'eng')
-            .then(({ data: { text } }) => {
-                const textUpper = text.toUpperCase();
-                const words = textUpper.match(/[A-Z]{2,10}/g) || [];
-                let uniqueWords = [...new Set(words)];
-                
-                const ignoreList = ["THE", "AND", "FOR", "YOU", "PORTFOLIO", "WATCHLIST", "PRICE", "CHANGE", "VOL", "LTP", "BUY", "SELL", "NSE", "BSE", "QTY", "AVG", "PROFIT", "LOSS", "TOTAL", "INVESTED", "VALUE", "RETURNS", "TODAY", "HOLDINGS", "EQUITY", "MARKET", "ORDER", "FUNDS", "ANGEL", "GROWW", "ZERODHA", "UPSTOX"];
-                let potentialStocks = uniqueWords.filter(w => !ignoreList.includes(w));
-                
-                let addedCount = 0;
-                potentialStocks.forEach(sym => {
-                    let exc = document.querySelector('input[name="exchange"]:checked').value;
-                    let finalSym = sym + ":" + exc;
-                    if (!myStocks.includes(finalSym)) { 
-                        myStocks.unshift(finalSym); 
-                        addedCount++;
-                    }
-                });
-                
-                if(addedCount > 0) {
-                    saveAndRender();
-                    loading.style.color = "#00e676";
-                    loading.innerText = `✅ Successfully added ${addedCount} stocks! (Please delete any incorrect names manually)`;
-                } else {
-                    loading.style.color = "#ff5252";
-                    loading.innerText = "⚠️ Could not read any valid stock names from this image.";
-                }
-                setTimeout(() => { loading.style.display = 'none'; }, 4000);
-            })
-            .catch(err => {
-                loading.style.color = "#ff5252";
-                loading.innerText = "❌ Scanner Failed. Please try a clearer screenshot.";
-                setTimeout(() => { loading.style.display = 'none'; }, 4000);
-            });
-        
+        const file = e.target.files[0]; if(!file) return;
+        const loading = document.getElementById('ocr-loading'); loading.style.display = 'block'; loading.innerText = "📸 Scanning Screenshot... Please wait ⏳";
+        if (typeof Tesseract === 'undefined') { loading.style.color = "#ff5252"; loading.innerText = "❌ Scanner library not loaded. Please wait a few seconds and try again."; setTimeout(() => { loading.style.display = 'none'; }, 4000); return; }
+        Tesseract.recognize(file, 'eng').then(({ data: { text } }) => {
+            const words = text.toUpperCase().match(/[A-Z]{2,10}/g) || []; let uniqueWords = [...new Set(words)];
+            const ignoreList = ["THE", "AND", "FOR", "YOU", "PORTFOLIO", "WATCHLIST", "PRICE", "CHANGE", "VOL", "LTP", "BUY", "SELL", "NSE", "BSE", "QTY", "AVG", "PROFIT", "LOSS", "TOTAL", "INVESTED", "VALUE", "RETURNS", "TODAY", "HOLDINGS", "EQUITY", "MARKET", "ORDER", "FUNDS", "ANGEL", "GROWW", "ZERODHA", "UPSTOX"];
+            let potentialStocks = uniqueWords.filter(w => !ignoreList.includes(w)); let addedCount = 0;
+            potentialStocks.forEach(sym => { let exc = document.querySelector('input[name="exchange"]:checked').value; let finalSym = sym + ":" + exc; if (!myStocks.includes(finalSym)) { myStocks.unshift(finalSym); addedCount++; } });
+            if(addedCount > 0) { saveAndRender(); loading.style.color = "#00e676"; loading.innerText = `✅ Successfully added ${addedCount} stocks! (Please delete any incorrect names manually)`; } else { loading.style.color = "#ff5252"; loading.innerText = "⚠️ Could not read any valid stock names from this image."; }
+            setTimeout(() => { loading.style.display = 'none'; }, 4000);
+        }).catch(err => { loading.style.color = "#ff5252"; loading.innerText = "❌ Scanner Failed. Please try a clearer screenshot."; setTimeout(() => { loading.style.display = 'none'; }, 4000); });
         this.value = ''; 
     });
 
     function saveAndRender() { localStorage.setItem('nse_tracker_v3', JSON.stringify(myStocks)); renderList(); }
+    function renderList() { const listDiv = document.getElementById('list'); listDiv.innerHTML = ''; myStocks.forEach(item => { let [sym, exc] = item.includes(':') ? item.split(':') : [item, 'NSE']; let cardId = 'card-' + sym + '-' + exc; let card = document.createElement("div"); card.className = "card"; card.id = cardId; card.innerHTML = `<div class="card-header"><div class="sym" style="color:#fff;">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching data...</div>`; listDiv.appendChild(card); fetchLiveStockData(item); }); generateGlobalNews(); }
 
-    function renderList() {
-        const listDiv = document.getElementById('list');
-        listDiv.innerHTML = '';
-        myStocks.forEach(item => {
-            let [sym, exc] = item.includes(':') ? item.split(':') : [item, 'NSE'];
-            let cardId = 'card-' + sym + '-' + exc;
-            let card = document.createElement("div");
-            card.className = "card";
-            card.id = cardId;
-            card.innerHTML = `<div class="card-header"><div class="sym" style="color:#fff;">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching data...</div>`;
-            listDiv.appendChild(card);
-            fetchLiveStockData(item);
-        });
-        generateGlobalNews();
-    }
-
-    let autoRefreshInterval;
-    document.getElementById('auto-refresh-btn').addEventListener('change', (e) => {
-        if(e.target.checked) {
-            autoRefreshInterval = setInterval(() => { window.fetchMarketIndices(); renderList(); }, 60000);
-        } else {
-            clearInterval(autoRefreshInterval);
-        }
-    });
-
-    window.generateGlobalNews = function() {
-        let newsContainer = document.getElementById("global-news-container");
-        newsContainer.innerHTML = "";
-        myStocks.slice(0, 10).forEach(item => {
-            let sym = item.split(':')[0];
-            let isPositive = Math.random() > 0.5;
-            let text = isPositive ? `Strong volume breakout expected for ${sym}.` : `Global pressure testing support levels for ${sym}.`;
-            let icon = isPositive ? '🟢' : '🔴';
-            newsContainer.innerHTML += `<div class="news-box" style="margin-bottom:10px;"><b>${sym}</b><div class="news-item">${icon} ${text}</div></div>`;
-        });
-    }
-
-    window.populateTable = function() {
-        const tbody = document.getElementById("table-body");
-        tbody.innerHTML = "";
-        myStocks.forEach(item => {
-            let data = globalStockData[item];
-            if(!data) return;
-            let colorCls = data.diff >= 0 ? 'green-text' : 'red-text';
-            let tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><b style="color:#fff;">${data.sym}</b></td>
-                <td><b class="${colorCls}">₹${data.price}</b></td>
-                <td class="${colorCls}">${data.diff >= 0 ? '▲':'▼'} ${Math.abs(data.diff).toFixed(2)}</td>
-                <td class="green-text">₹${data.high}</td>
-                <td class="red-text">₹${data.low}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
+    let autoRefreshInterval; document.getElementById('auto-refresh-btn').addEventListener('change', (e) => { if(e.target.checked) { autoRefreshInterval = setInterval(() => { window.fetchMarketIndices(); renderList(); }, 60000); } else { clearInterval(autoRefreshInterval); } });
+    window.generateGlobalNews = function() { let newsContainer = document.getElementById("global-news-container"); newsContainer.innerHTML = ""; myStocks.slice(0, 10).forEach(item => { let sym = item.split(':')[0]; let isPositive = Math.random() > 0.5; let text = isPositive ? `Strong volume breakout expected for ${sym}.` : `Global pressure testing support levels for ${sym}.`; let icon = isPositive ? '🟢' : '🔴'; newsContainer.innerHTML += `<div class="news-box" style="margin-bottom:10px;"><b>${sym}</b><div class="news-item">${icon} ${text}</div></div>`; }); }
+    window.populateTable = function() { const tbody = document.getElementById("table-body"); if(!tbody) return; tbody.innerHTML = ""; myStocks.forEach(item => { let data = globalStockData[item]; if(!data) return; let colorCls = data.diff >= 0 ? 'green-text' : 'red-text'; let tr = document.createElement("tr"); tr.innerHTML = `<td><b style="color:#fff;">${data.sym}</b></td><td><b class="${colorCls}">₹${data.price}</b></td><td class="${colorCls}">${data.diff >= 0 ? '▲':'▼'} ${Math.abs(data.diff).toFixed(2)}</td><td class="green-text">₹${data.high}</td><td class="red-text">₹${data.low}</td>`; tbody.appendChild(tr); }); }
     async function fetchLiveStockData(item) {
         let [sym, exc] = item.includes(':') ? item.split(':') : [item, 'NSE'];
         let cardId = 'card-' + sym + '-' + exc;
@@ -481,7 +289,6 @@ function initApp() {
         
         try {
             let querySym = exc === 'BSE' ? sym + '.BO' : sym + '.NS';
-            
             let res = await fetch(MY_SERVER_URL + querySym + "&range=1y");
             let data = await res.json();
             
@@ -513,7 +320,6 @@ function initApp() {
             if(minPrice === Infinity) minPrice = meta.regularMarketDayLow || meta.regularMarketPrice;
 
             let current = meta.regularMarketPrice;
-            
             let prev = (meta.chartPreviousClose !== undefined && meta.chartPreviousClose !== null) ? meta.chartPreviousClose : meta.previousClose;
             
             let diff = current - prev;
@@ -566,4 +372,21 @@ function initApp() {
         const target = e.target;
         if(target.classList.contains('del-btn')) {
             if(confirm(`Remove ${target.dataset.item}?`)) { myStocks = myStocks.filter(s => s !== target.dataset.item); saveAndRender(); }
-        } else if
+        } else if(target.classList.contains('refresh-btn')) {
+            fetchLiveStockData(target.dataset.item);
+        } else if(target.dataset.action === 'filter') {
+            const item = target.dataset.item;
+            const days = parseInt(target.dataset.days);
+            target.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            target.classList.add('active');
+            let [sym, exc] = item.split(':');
+            const box = document.getElementById(`hist-box-${sym}-${exc}`);
+            if(box) box.innerHTML = (stockHistoryMap.get(item)||[]).slice(0, days).map(h => h.html).join('');
+        }
+    });
+
+    renderList();
+}
+</script>
+</body>
+</html>
