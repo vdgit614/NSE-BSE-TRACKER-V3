@@ -36,56 +36,63 @@ h2 { margin: 0; font-size: 1.2em; display: flex; align-items: center; gap: 6px; 
 .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; display: none; }
 .overlay.open { display: block; }
 
-/* Indices (Horizontal) */
+/* Indices */
 .indices-container { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
 .index-card { flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; min-width: 140px; }
 .index-card .sym { font-weight: bold; color: var(--text); }
 .green-text { color: #00e676; font-weight: bold; }
 .red-text { color: #ff5252; font-weight: bold; }
 
-/* Input Group Fix */
+/* Input Group */
 .input-group { display: flex; gap: 5px; margin-bottom: 10px; position: relative; width: 100%; box-sizing: border-box; align-items: center; }
 input[type="text"] { flex: 1; min-width: 0; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); outline: none; }
 .btn { padding: 10px 12px; border-radius: 8px; border: 0; background: var(--btn-bg); color: var(--btn-text); font-weight: bold; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .camera-btn { background: #333; color: #fff; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; flex-shrink: 0; }
-.exchange-toggle { display: flex; gap: 15px; font-size: 12px; color: var(--muted); margin-bottom: 15px; padding-left: 5px; }
+
+/* Controls Row (Exchange + Auto-Refresh) */
+.controls-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-left: 5px; }
+.exchange-toggle { display: flex; gap: 15px; font-size: 12px; color: var(--muted); }
+.exchange-toggle label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+.auto-refresh-box { font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 5px; cursor: pointer; font-weight:bold; background: var(--card-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); }
 
 /* Suggestions */
 .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; max-height: 180px; overflow-y: auto; z-index: 1000; display: none; margin-top: 5px; }
 .suggestion-item { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; color: var(--text); }
 
-/* Card Redesign */
+/* Card UI Updates */
 .sector-header { background: var(--sector-header); padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: bold; margin: 20px 0 10px 0; color: var(--text); border-left: 4px solid var(--btn-bg); }
 .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
-.sym { font-size: 1.2em; font-weight: bold; display:flex; align-items:center; gap:6px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.sym { font-size: 1.2em; font-weight: bold; display:flex; align-items:center; gap:6px; color: #fff; }
 .exc-badge { font-size: 9px; padding: 2px 5px; border-radius: 4px; background: #444; color: #fff; }
-.current-price { font-size: 1.4em; font-weight: bold; margin-top: 5px; }
-.price-change { font-size: 13px; font-weight: bold; margin-bottom: 10px; }
-.high-low-box { display: flex; justify-content: space-between; background: var(--input-bg); padding: 8px; border-radius: 6px; font-size: 11px; margin-bottom: 10px; border: 1px solid var(--border); }
-.high-low-col { display: flex; flex-direction: column; gap: 3px; }
+.current-price { font-size: 1.6em; font-weight: bold; margin-top: 5px; }
+.price-change { font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+
+/* 52W Horizontal Details */
+.high-low-details { font-size: 12px; margin-bottom: 15px; color: var(--muted); line-height: 1.6; }
 
 .actions { display: flex; gap: 8px; }
 .del-btn, .refresh-btn { border: none; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; }
 .del-btn { background: #ff525222; color: #ff5252; }
 .refresh-btn { background: #29b6f622; color: #29b6f6; }
 
-/* History & Links (Moved down) */
+/* History & Links */
 .hist-filters { display: flex; gap: 5px; justify-content: space-between; margin-bottom: 5px; }
-.filter-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 4px; border-radius: 4px; font-size: 11px; cursor: pointer; flex: 1; }
+.filter-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 5px; border-radius: 6px; font-size: 11px; cursor: pointer; flex: 1; }
 .filter-btn.active { background: var(--btn-bg); color: var(--btn-text); border-color: var(--btn-bg); font-weight: bold; }
-.history-box { max-height: 120px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 5px; background: var(--input-bg); margin-bottom: 10px; }
-.hist-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+.history-box { max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; background: var(--input-bg); margin-bottom: 15px; }
+.hist-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.hist-row:last-child { border-bottom: none; }
 
-.research-links { display: flex; gap: 5px; border-top: 1px dashed var(--border); padding-top: 10px; margin-bottom: 10px; }
-.r-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 6px; border-radius: 6px; color: #fff !important; text-align: center; flex: 1; }
+.research-links { display: flex; gap: 6px; border-top: 1px dashed var(--border); padding-top: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+.r-link { text-decoration: none; font-size: 11px; font-weight: bold; padding: 8px; border-radius: 6px; color: #fff !important; text-align: center; flex: 1; min-width: 60px; }
 .r-yahoo { background: #720e9e; }
 .r-google { background: #4285F4; }
 .r-screener { background: #263238; }
 
-.news-box { padding: 8px; background: var(--input-bg); border-radius: 6px; border: 1px solid var(--border); }
-.news-title { font-size: 11px; font-weight: bold; margin-bottom: 5px; color: var(--muted); }
-.news-item { font-size: 11px; margin-bottom: 4px; display: flex; gap: 5px; align-items: flex-start; }
+.news-box { padding: 10px; background: var(--input-bg); border-radius: 8px; border: 1px solid var(--border); }
+.news-title { font-size: 12px; font-weight: bold; margin-bottom: 8px; color: var(--muted); }
+.news-item { font-size: 12px; margin-bottom: 4px; display: flex; gap: 6px; align-items: flex-start; }
 
 /* Table View */
 .table-container { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); }
@@ -93,7 +100,7 @@ table { width: 100%; border-collapse: collapse; font-size: 12px; }
 th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
 th { background: var(--input-bg); color: var(--muted); }
 
-/* Login / Auth UI Fixes */
+/* Login */
 .full-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
 .auth-input-container { position: relative; width: 80%; max-width: 300px; margin: 5px auto 10px auto; }
 .auth-input { width: 100%; padding: 10px 15px; border-radius: 20px; border: 1px solid var(--border); background-color: var(--input-bg); color: var(--text); font-size: 14px; outline: none; box-sizing: border-box; }
@@ -104,16 +111,22 @@ th { background: var(--input-bg); color: var(--muted); }
 </style>
 </head>
 <body>
-<!-- Loading Screen -->
 <div id="loading-screen" class="full-screen">
     <h2 style="color: #4CAF50;">NSE BSE TRACKER PRO V3</h2>
     <p>Loading... ⏳</p>
 </div>
 
-<!-- Login Screen -->
+<script>
+    setTimeout(function() {
+        var loader = document.getElementById("loading-screen");
+        if(loader && loader.style.display !== "none") {
+            loader.innerHTML += "<br><p style='color:#ff5252; font-size:13px; text-align:center;'>लॉगिन लोड होने में समय लग रहा है।<br>कृपया पेज रिफ्रेश करें।</p><button onclick='location.reload()' style='margin-top:10px; padding:8px 20px; background:#ff5252; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;'>Refresh</button>";
+        }
+    }, 6000);
+</script>
+
 <div id="login-screen" class="full-screen" style="display: none;">
     <h2 style="color: #4CAF50; margin-bottom: 20px;">LOGIN</h2>
-    
     <div class="auth-input-container">
         <input type="email" id="email-input" class="auth-input" placeholder="Enter Email">
     </div>
@@ -121,9 +134,7 @@ th { background: var(--input-bg); color: var(--muted); }
         <input type="password" id="password-input" class="auth-input" placeholder="Enter Password">
         <span id="toggle-password" class="toggle-pwd">👁️</span>
     </div>
-    
     <div class="forgot-pwd" id="forgot-btn">Forgot Password?</div>
-    
     <button id="login-btn" class="auth-btn">Login</button>
     <button id="signup-btn" class="auth-btn" style="background:#333;">Sign Up</button>
     <p id="error-message" class="error-msg"></p>
@@ -152,7 +163,7 @@ th { background: var(--input-bg); color: var(--muted); }
         <button id="theme-btn" style="background:transparent; border:none; color:var(--text); font-size:18px;">🌓</button>
     </div>
 
-    <!-- Indices (Horizontal format) -->
+    <!-- Indices -->
     <div class="indices-container">
         <div class="index-card" id="nifty-card">Loading NIFTY...</div>
         <div class="index-card" id="sensex-card">Loading SENSEX...</div>
@@ -168,16 +179,22 @@ th { background: var(--input-bg); color: var(--muted); }
             <div id="suggestions" class="suggestions-box"></div>
         </div>
         
-        <div class="exchange-toggle">
-            <label><input type="radio" name="exchange" value="NSE" checked> NSE</label>
-            <label><input type="radio" name="exchange" value="BSE"> BSE</label>
+        <!-- Exchange & Auto-Refresh Controls -->
+        <div class="controls-row">
+            <div class="exchange-toggle">
+                <label><input type="radio" name="exchange" value="NSE" checked> NSE</label>
+                <label><input type="radio" name="exchange" value="BSE"> BSE</label>
+            </div>
+            <label class="auto-refresh-box">
+                <input type="checkbox" id="auto-refresh-btn"> Auto-Refresh (1m)
+            </label>
         </div>
         
         <div id="ocr-loading" style="font-size:12px; color:#00e676; display:none; text-align:center;">Scanning image... ⏳</div>
         <div id="list"></div>
     </div>
 
-    <!-- View 2: Table View (Sheet Form) -->
+    <!-- View 2: Table View -->
     <div id="table-view" style="display: none;">
         <h3 style="margin-top:0;">Portfolio Table</h3>
         <div class="table-container">
@@ -191,14 +208,12 @@ th { background: var(--input-bg); color: var(--muted); }
                         <th>52W Low</th>
                     </tr>
                 </thead>
-                <tbody id="table-body">
-                    <!-- Populated via JS -->
-                </tbody>
+                <tbody id="table-body"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- View 3: Global Stock News -->
+    <!-- View 3: News -->
     <div id="news-view" style="display: none;">
         <h3 style="margin-top:0;">Market News</h3>
         <div id="global-news-container">
@@ -224,7 +239,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const errorMsg = document.getElementById("error-message");
 
-// Auth Listeners
 document.getElementById("toggle-password").addEventListener("click", function() {
     let pwd = document.getElementById("password-input");
     if (pwd.type === "password") { pwd.type = "text"; this.innerText = "🙈"; } 
@@ -265,7 +279,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Sidebar Logic
 const sidebar = document.getElementById("sidebar");
 const overlay = document.getElementById("overlay");
 document.getElementById("open-menu").onclick = () => { sidebar.classList.add("open"); overlay.classList.add("open"); }
@@ -283,9 +296,8 @@ window.switchView = function(viewId) {
 };
 
 let isAppReady = false;
-let globalStockData = {}; // Cache for table view
+let globalStockData = {}; 
 
-// Market Indices (Horizontal Format)
 window.fetchMarketIndices = async function() {
     const indices = [ { id: 'nifty', sym: '%5ENSEI', name: 'NIFTY' }, { id: 'sensex', sym: '%5EBSESN', name: 'SENSEX' } ];
     for (let idx of indices) {
@@ -333,7 +345,6 @@ function initApp() {
     const suggestionsBox = document.getElementById("suggestions");
     let searchTimeout;
 
-    // YAHOO Search API (Working for letters)
     searchInput.addEventListener("input", () => {
         let val = searchInput.value.trim();
         if (val.length === 0) { suggestionsBox.style.display = "none"; return; }
@@ -383,14 +394,23 @@ function initApp() {
             let card = document.createElement("div");
             card.className = "card";
             card.id = cardId;
-            card.innerHTML = `<div class="card-header"><div class="sym">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching data...</div>`;
+            card.innerHTML = `<div class="card-header"><div class="sym" style="color:#fff;">${sym} <span class="exc-badge">${exc}</span></div></div><div class="small">Fetching data...</div>`;
             listDiv.appendChild(card);
             fetchLiveStockData(item);
         });
         generateGlobalNews();
     }
 
-    // Generate News for News Tab
+    // Auto-Refresh Logic
+    let autoRefreshInterval;
+    document.getElementById('auto-refresh-btn').addEventListener('change', (e) => {
+        if(e.target.checked) {
+            autoRefreshInterval = setInterval(() => { window.fetchMarketIndices(); renderList(); }, 60000);
+        } else {
+            clearInterval(autoRefreshInterval);
+        }
+    });
+
     window.generateGlobalNews = function() {
         let newsContainer = document.getElementById("global-news-container");
         newsContainer.innerHTML = "";
@@ -403,7 +423,6 @@ function initApp() {
         });
     }
 
-    // Populate Table View
     window.populateTable = function() {
         const tbody = document.getElementById("table-body");
         tbody.innerHTML = "";
@@ -432,7 +451,6 @@ function initApp() {
         try {
             let querySym = exc === 'BSE' ? sym + '.BO' : sym + '.NS';
             
-            // We append range=1y to try getting 52w dates from chart data
             let res = await fetch(MY_SERVER_URL + querySym + "&range=1y");
             let data = await res.json();
             
@@ -449,11 +467,11 @@ function initApp() {
                 let c = closes[i];
                 if(c === null) continue;
                 
-                // Track 52W High / Low & Dates
-                if(c > maxPrice) { maxPrice = c; maxDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'}); }
-                if(c < minPrice) { minPrice = c; minDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'}); }
+                // Track 52W High / Low & Format Date with Year (e.g. 23 Sept 2026)
+                if(c > maxPrice) { maxPrice = c; maxDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}); }
+                if(c < minPrice) { minPrice = c; minDate = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}); }
                 
-                let dateStr = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short'});
+                let dateStr = new Date(timestamps[i]*1000).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
                 let color = c >= closes[i-1] ? 'green-text' : 'red-text';
                 let icon = c >= closes[i-1] ? '▲' : '▼';
                 historyArr.push({ time: timestamps[i], html: `<div class="hist-row"><span>${dateStr}</span><span class="${color}">${icon} ₹${c.toFixed(2)}</span></div>` });
@@ -461,7 +479,6 @@ function initApp() {
             historyArr.sort((a,b) => b.time - a.time);
             stockHistoryMap.set(item, historyArr);
             
-            // Fallback to meta if loop failed
             if(maxPrice === 0) maxPrice = meta.regularMarketDayHigh || meta.regularMarketPrice;
             if(minPrice === Infinity) minPrice = meta.regularMarketDayLow || meta.regularMarketPrice;
 
@@ -471,27 +488,27 @@ function initApp() {
             let pChange = (diff / prev) * 100;
             
             let isPos = diff >= 0;
+            // Dynamic Color for Current Price
             let colorCls = isPos ? 'green-text' : 'red-text';
             let sign = isPos ? '+' : '';
             let arrow = isPos ? '▲' : '▼';
             
-            // Cache for table view
             globalStockData[item] = { sym, price: current.toFixed(2), diff: diff.toFixed(2), high: maxPrice.toFixed(2), low: minPrice.toFixed(2) };
 
             card.innerHTML = `
                 <div class="card-header">
-                    <div class="sym">${sym} <span class="exc-badge" style="background:${exc==='BSE'?'#1976D2':'#388E3C'}">${exc}</span></div>
+                    <div class="sym" style="color:#fff;">${sym} <span class="exc-badge" style="background:${exc==='BSE'?'#1976D2':'#388E3C'}">${exc}</span></div>
                     <div class="actions"><button class="refresh-btn" data-item="${item}">↻</button><button class="del-btn" data-item="${item}">Del</button></div>
                 </div>
                 
-                <!-- NEW PRICE FORMAT -->
-                <div class="current-price">₹${current.toFixed(2)}</div>
+                <!-- DYNAMIC PRICE COLOR -->
+                <div class="current-price ${colorCls}">₹${current.toFixed(2)}</div>
                 <div class="price-change ${colorCls}">${arrow} ${sign}${diff.toFixed(2)} (${sign}${pChange.toFixed(2)}%)</div>
                 
-                <!-- 52W HIGH LOW -->
-                <div class="high-low-box">
-                    <div class="high-low-col"><span style="color:var(--muted)">52W High</span> <b class="green-text">₹${maxPrice.toFixed(2)}</b> <span>${maxDate}</span></div>
-                    <div class="high-low-col" style="text-align:right;"><span style="color:var(--muted)">52W Low</span> <b class="red-text">₹${minPrice.toFixed(2)}</b> <span>${minDate}</span></div>
+                <!-- 52W HORIZONTAL DETAILS WITH YEAR -->
+                <div class="high-low-details">
+                    <div style="margin-bottom: 4px;">52W High: <b class="green-text">₹${maxPrice.toFixed(2)}</b> (${maxDate})</div>
+                    <div>52W Low: <b class="red-text">₹${minPrice.toFixed(2)}</b> (${minDate})</div>
                 </div>
                 
                 <!-- HISTORY FILTERS -->
@@ -504,8 +521,9 @@ function initApp() {
                 </div>
                 <div class="history-box" id="hist-box-${sym}-${exc}">${historyArr.slice(0,7).map(h=>h.html).join('')}</div>
                 
-                <!-- LINKS & NEWS -->
+                <!-- LINKS (NSE Added) & NEWS -->
                 <div class="research-links">
+                    <a href="https://www.nseindia.com/get-quotes/equity?symbol=${sym}" target="_blank" class="r-link" style="background:#f37021;">NSE</a>
                     <a href="https://finance.yahoo.com/quote/${querySym}" target="_blank" class="r-link r-yahoo">Yahoo</a>
                     <a href="https://www.google.com/finance/quote/${sym}:${exc}" target="_blank" class="r-link r-google">Google</a>
                     <a href="https://www.screener.in/company/${sym}/consolidated/" target="_blank" class="r-link r-screener">Screener</a>
@@ -513,7 +531,7 @@ function initApp() {
                 <div class="news-box"><div class="news-title">Flash News</div><div class="news-item">${isPos ? '🟢 Uptrend momentum building.' : '🔴 Facing resistance level.'}</div></div>
             `;
         } catch(e) {
-            card.innerHTML = `<div class="card-header"><b class="sym">${sym} <span class="exc-badge">${exc}</span></b> <button class="del-btn" data-item="${item}">Del</button></div><div class="red-text small">Data unavailable.</div>`;
+            card.innerHTML = `<div class="card-header"><b class="sym" style="color:#fff;">${sym} <span class="exc-badge">${exc}</span></b> <button class="del-btn" data-item="${item}">Del</button></div><div class="red-text small">Data unavailable.</div>`;
         }
     }
 
